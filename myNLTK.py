@@ -112,3 +112,4 @@ for word in word_list:
     word_stem.append(porter.stem(word))
 # print(word_stem)
 # ['studi', 'studi', 'leav', 'play']
+#test
