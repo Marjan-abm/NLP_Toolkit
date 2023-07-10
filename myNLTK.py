@@ -11,6 +11,10 @@ from wordcloud import WordCloud
 import numpy as np
 from PIL import Image
 from nltk.stem import PorterStemmer
+from nltk.stem import SnowballStemmer
+from nltk.stem import WordNetLemmatizer
+nltk.download('wordnet')
+nltk.download('averaged_perceptron_tagger')
 
 
 # Open the text file
@@ -112,4 +116,52 @@ for word in word_list:
     word_stem.append(porter.stem(word))
 # print(word_stem)
 # ['studi', 'studi', 'leav', 'play']
-#test
+
+
+#Stemming by using snowball stemmer library
+snowball_stem = SnowballStemmer("english")
+
+# for word in word_list:
+#     print(snowball_stem.stem(word))
+# studi
+# studi
+# leav
+# play
+
+
+#Lemmatizing
+lemmatizer = WordNetLemmatizer()
+# for word in word_list:
+#     print(lemmatizer.lemmatize(word))
+# study
+# studying
+# leaf
+# play
+
+# for word in word_list:
+#     print(lemmatizer.lemmatize(word, pos="v"))
+# study
+# study
+# leave
+# play
+
+# POS tagging
+# words are tokenized text that we had
+tagged_words = nltk.pos_tag(words)
+# print(tagged_words)
+
+# [('Once', 'RB'), ('upon', 'IN'), ('a', 'DT'), ('time', 'NN'), ('there', 'EX'), ('was', 'VBD'), ('an', 'DT'), ('old', 'JJ'), ('mother', 'NN'), ('pig', 'NN'), ('who', 'WP'), ('had', 'VBD'), ('three', 'CD'), ('little', 'JJ'), ('pigs', 'NNS'), ('and', 'CC'), ('not', 'RB'), ('enough', 'RB'), ('food', 'NN'), ('to', 'TO'), ('feed', 'VB'), ('them', 'PRP'), ('.', '.'), ('So', 'RB'), ('when', 'WRB'), ('they', 'PRP'), ('were', 'VBD'), ('old', 'JJ'), ('enough', 'RB'), (',', ','), ('she', 'PRP'), ('sent', 'VBD'), ('them', 'PRP'), ('out', 'RP'), ('into', 'IN'), ('the', 'DT'), ('world', 'NN'), ('to', 'TO'), ('seek', 'VB'), ('their', 'PRP$'), ('fortunes', 'NNS'), ('.', '.'), ('The', 'DT'), ('first', 'JJ'), ('little', 'JJ'), ('pig', 'NN'), ('was', 'VBD'), ('very', 'RB'), ('lazy', 'JJ'), ('.', '.'), ('He', 'PRP'), ('did', 'VBD'), ("n't", 'RB'), ('want', 'VB'), ('to', 'TO'), ('work', 'VB'), ('at', 'IN'), ('all', 'DT'), ('and', 'CC'), ('he', 'PRP'), ('build', 'VB'), ('his', 'PRP$'), ('house', 'NN'), ('out', 'IN'), ('of', 'IN'), ('straw', 'NN'), ('.', '.'), ('The', 'DT'), ('second', 'JJ'), ('little', 'JJ'), ('pig', 'NN'), ('worked', 'VBD'), ('a', 'DT'), ('little', 'JJ'), ('bit', 'NN'), ('harder', 'RBR'), ('but', 'CC'), ('he', 'PRP'), ('was', 'VBD'), ('somewhat', 'RB'), ('lazy', 'JJ'), ('too', 'RB'), ('and', 'CC'), ('he', 'PRP'), ('built', 'VBD'), ('his', 'PRP$'), ('house', 'NN'), ('out', 'IN'), ('of', 'IN'), ('sticks', 'NNS'), ('.', '.'), ('Then', 'RB'), (',', ','), ('they', 'PRP'), ('sang', 'VBD'), ('and', 'CC'), ('danced', 'VBD'), ('and', 'CC'), ('played', 'VBD'), ('together', 'RB'), ('the', 'DT'), ('rest', 'NN'), ('of', 'IN'), ('the', 'DT'), ('day', 'NN'), ('.', '.'), ('The', 'DT'), ('third', 'JJ'), ('little', 'JJ'), ('pig', 'NN'), ('worked', 'VBD'), ('hard', 'JJ'), ('all', 'DT'), ('day', 'NN'), ('and', 'CC'), ('built', 'VBD'), ('his', 'PRP$'), ('house', 'NN'), ('with', 'IN'), ('bricks', 'NNS'), ('.', '.'), ('It', 'PRP'), ('was', 'VBD'), ('a', 'DT'), ('sturdy', 'JJ'), ('house', 'NN'), ('complete', 'JJ'), ('with', 'IN'), ('a', 'DT'), ('fine', 'JJ'), ('fireplace', 'NN'), ('and', 'CC'), ('chimney', 'NN'), ('.', '.'), ('It', 'PRP'), ('looked', 'VBD'), ('like', 'IN'), ('it', 'PRP'), ('could', 'MD'), ('withstand', 'VB'), ('the', 'DT'), ('strongest', 'JJS'), ('winds', 'NNS'), ('.', '.')]
+
+
+# Extracting noun phrase from text
+# ? - optional character
+# * - 0 or more repetations
+noun_gram = "NP : {<DT>?<JJ>*<NN>}"
+#creating a parser
+parser = nltk.RegexpParser(noun_gram)
+# Parsing text
+output = parser.parse(tagged_words)
+print(output)
+
+#To visualize:
+# output.draw()
