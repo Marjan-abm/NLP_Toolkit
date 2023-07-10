@@ -15,6 +15,8 @@ from nltk.stem import SnowballStemmer
 from nltk.stem import WordNetLemmatizer
 nltk.download('wordnet')
 nltk.download('averaged_perceptron_tagger')
+from sklearn.feature_extraction.text import CountVectorizer
+from sklearn.feature_extraction.text import TfidfVectorizer
 
 
 # Open the text file
@@ -157,11 +159,69 @@ tagged_words = nltk.pos_tag(words)
 # ? - optional character
 # * - 0 or more repetations
 noun_gram = "NP : {<DT>?<JJ>*<NN>}"
+
 #creating a parser
-parser = nltk.RegexpParser(noun_gram)
+parser_noun = nltk.RegexpParser(noun_gram)
+
 # Parsing text
-output = parser.parse(tagged_words)
-print(output)
+extracted_noun = parser_noun.parse(tagged_words)
+# print(extracted_noun)
 
 #To visualize:
-# output.draw()
+# extracted_noun.draw()
+
+
+#python implementation for bag of words
+#create an object
+cv = CountVectorizer()
+
+#Generating output for Bag of Words
+bag_of_words = cv.fit_transform(sentences).toarray()
+
+# print(bag_of_words)
+# [[0 1 1 0 0 0 0 0 0 0 0 0 0 0 0 1 1 0 0 0 1 0 1 0 0 0 0 0 0 0 0 0 1 0 1 1
+#   0 1 1 0 1 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 1 0 0 1 1 1 0 0 1 0 0 1 0
+#   0 1 0 0 0 0 0 0]
+#  [0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 1 0 0 0 0 0 0 1 0 0 0 0 0 0 0
+#   0 1 0 1 0 0 0 0 0 0 1 1 1 1 0 0 0 0 0 1 1 1 0 0 1 0 0 0 1 0 0 0 0 0 0 1
+#   1 0 0 0 0 0 0 1]]
+
+#Total words with their index in model
+# print(cv.vocabulary_)
+# {'once': 38, 'upon': 67, 'time': 63, 'there': 59, 'was': 70, 'an': 1, 'old': 37, 'mother': 34, 'pig': 40, 'who': 73, 'had': 22, 'three': 62, 'little': 32, 'pigs': 41, 'and': 2, 'not': 35, 'enough': 15, 'food': 20, 'to': 64, 'feed': 16, 'them': 57, 'so': 49, 'when': 72, 'they': 60, 'were': 71, 'she': 48, 'sent': 47, 'out': 39, 'into': 28, 'the': 55, 'world': 79, 'seek': 46, 'their': 56, 'fortunes': 21, 'first': 19, 'very': 68, 'lazy': 30, 'he': 25, 'didn': 14, 'want': 69, 'work': 77, 'at': 3, 'all': 0, 'build': 6, 'his': 26, 'house': 27, 'of': 36, 'straw': 52, 'second': 45, 'worked': 78, 'bit': 4, 'harder': 24, 'but': 8, 'somewhat': 50, 'too': 66, 'built': 7, 'sticks': 51, 'then': 58, 'sang': 44, 'danced': 12, 'played': 42, 'together': 65, 'rest': 43, 'day': 13, 'third': 61, 'hard': 23, 'with': 75, 'bricks': 5, 'it': 29, 'sturdy': 54, 'complete': 10, 'fine': 17, 'fireplace': 18, 'chimney': 9, 'looked': 33, 'like': 31, 'could': 11, 'withstand': 76, 'strongest': 53, 'winds': 74}
+
+#features
+# print(cv.get_feature_names_out())
+# ['all' 'an' 'and' 'at' 'bit' 'bricks' 'build' 'built' 'but' 'chimney'
+#  'complete' 'could' 'danced' 'day' 'didn' 'enough' 'feed' 'fine'
+#  'fireplace' 'first' 'food' 'fortunes' 'had' 'hard' 'harder' 'he' 'his'
+#  'house' 'into' 'it' 'lazy' 'like' 'little' 'looked' 'mother' 'not' 'of'
+#  'old' 'once' 'out' 'pig' 'pigs' 'played' 'rest' 'sang' 'second' 'seek'
+#  'sent' 'she' 'so' 'somewhat' 'sticks' 'straw' 'strongest' 'sturdy' 'the'
+#  'their' 'them' 'then' 'there' 'they' 'third' 'three' 'time' 'to'
+#  'together' 'too' 'upon' 'very' 'want' 'was' 'were' 'when' 'who' 'winds'
+#  'with' 'withstand' 'work' 'worked' 'world']
+
+
+#TF-IDF (term frequency-Inverse Document Frequency)
+#create an object 
+vectorizer = TfidfVectorizer(norm=None)
+
+#Generating output for TF-IDF
+X = vectorizer.fit_transform(sentences).toarray()
+
+#Total words with their index in model
+# print(vectorizer.vocabulary_)
+# {'once': 38, 'upon': 67, 'time': 63, 'there': 59, 'was': 70, 'an': 1, 'old': 37, 'mother': 34, 'pig': 40, 'who': 73, 'had': 22, 'three': 62, 'little': 32, 'pigs': 41, 'and': 2, 'not': 35, 'enough': 15, 'food': 20, 'to': 64, 'feed': 16, 'them': 57, 'so': 49, 'when': 72, 'they': 60, 'were': 71, 'she': 48, 'sent': 47, 'out': 39, 'into': 28, 'the': 55, 'world': 79, 'seek': 46, 'their': 56, 'fortunes': 21, 'first': 19, 'very': 68, 'lazy': 30, 'he': 25, 'didn': 14, 'want': 69, 'work': 77, 'at': 3, 'all': 0, 'build': 6, 'his': 26, 'house': 27, 'of': 36, 'straw': 52, 'second': 45, 'worked': 78, 'bit': 4, 'harder': 24, 'but': 8, 'somewhat': 50, 'too': 66, 'built': 7, 'sticks': 51, 'then': 58, 'sang': 44, 'danced': 12, 'played': 42, 'together': 65, 'rest': 43, 'day': 13, 'third': 61, 'hard': 23, 'with': 75, 'bricks': 5, 'it': 29, 'sturdy': 54, 'complete': 10, 'fine': 17, 'fireplace': 18, 'chimney': 9, 'looked': 33, 'like': 31, 'could': 11, 'withstand': 76, 'strongest': 53, 'winds': 74}
+
+#Features
+# print(vectorizer.get_feature_names_out())
+# ['all' 'an' 'and' 'at' 'bit' 'bricks' 'build' 'built' 'but' 'chimney'
+#  'complete' 'could' 'danced' 'day' 'didn' 'enough' 'feed' 'fine'
+#  'fireplace' 'first' 'food' 'fortunes' 'had' 'hard' 'harder' 'he' 'his'
+#  'house' 'into' 'it' 'lazy' 'like' 'little' 'looked' 'mother' 'not' 'of'
+#  'old' 'once' 'out' 'pig' 'pigs' 'played' 'rest' 'sang' 'second' 'seek'
+#  'sent' 'she' 'so' 'somewhat' 'sticks' 'straw' 'strongest' 'sturdy' 'the'
+#  'their' 'them' 'then' 'there' 'they' 'third' 'three' 'time' 'to'
+#  'together' 'too' 'upon' 'very' 'want' 'was' 'were' 'when' 'who' 'winds'
+#  'with' 'withstand' 'work' 'worked' 'world']
